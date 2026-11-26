@@ -1,5 +1,12 @@
 
-import { ArrowRight, BookOpen, Search } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Database,
+  Network,
+  Palette,
+  Search,
+} from "lucide-react";
 import type { Course } from "../App";
 
 interface Props {
@@ -29,21 +36,24 @@ const courses: Course[] = [
   },
 ];
 
+const courseIcons = [BookOpen, Database, Network, Palette];
+
 export default function HomePage({
   onSelectCourse,
 }: Props) {
   return (
-    <div className="min-h-screen p-4">
+    <div className="min-h-screen bg-background p-4">
       <header className="mb-6">
-        <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-background">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-background">
             <BookOpen size={20} />
           </div>
 
           <div>
-            <h1 className="font-bold text-lg">
+            <h1 className="text-lg font-bold">
               Canvas Switcher
             </h1>
+
             <p className="text-xs text-text-secondary">
               Your courses, one click away.
             </p>
@@ -53,10 +63,13 @@ export default function HomePage({
 
       <div className="mb-5 flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-3">
         <Search size={18} className="text-text-muted" />
-        <span className="text-sm text-text-secondary">
-          Search courses...
-        </span>
-        <span className="ml-auto text-xs text-text-muted">
+
+        <input
+          placeholder="Search courses..."
+          className="w-full bg-transparent text-sm outline-none placeholder:text-text-muted"
+        />
+
+        <span className="rounded-md border border-border px-1.5 py-0.5 text-xs text-text-muted">
           /
         </span>
       </div>
@@ -72,33 +85,43 @@ export default function HomePage({
       </div>
 
       <div className="space-y-2">
-        {courses.map((course) => (
-          <button
-            key={course.id}
-            onClick={() => onSelectCourse(course)}
-            className="group flex w-full items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition hover:border-accent/40 hover:bg-surface-hover"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-              <BookOpen size={18} />
-            </div>
+        {courses.map((course, index) => {
+          const Icon = courseIcons[index];
 
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">
-                {course.name}
-              </p>
+          return (
+            <button
+              key={course.id}
+              onClick={() => onSelectCourse(course)}
+              className="group flex w-full items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition-all hover:border-accent/50 hover:bg-surface-hover"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                <Icon size={20} />
+              </div>
 
-              <p className="mt-1 text-xs text-text-secondary">
-                {course.code}
-              </p>
-            </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-text-secondary">
+                  {course.code}
+                </p>
 
-            <ArrowRight
-              size={16}
-              className="text-text-muted transition group-hover:text-accent"
-            />
-          </button>
-        ))}
+                <p className="mt-1 line-clamp-2 text-sm font-medium leading-snug">
+                  {course.name}
+                </p>
+              </div>
+
+              <ArrowRight
+                size={16}
+                className="shrink-0 text-text-muted transition group-hover:text-accent"
+              />
+            </button>
+          );
+        })}
       </div>
+
+      <footer className="mt-6 border-t border-border pt-4">
+        <p className="text-center text-xs text-text-muted">
+          Canvas Switcher · Beta
+        </p>
+      </footer>
     </div>
   );
 }

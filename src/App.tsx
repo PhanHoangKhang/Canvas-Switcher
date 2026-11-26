@@ -1,14 +1,9 @@
-
 import { useState } from "react";
 import HomePage from "./pages/HomePage";
 import CoursePage from "./pages/CoursePage";
 import ModulePage from "./pages/ModulePage";
 
-export type Screen =
-  | "home"
-  | "course"
-  | "modules"
-  | "search";
+export type Screen = "home" | "course" | "modules";
 
 export interface Course {
   id: number;
@@ -37,7 +32,7 @@ export default function App() {
           course={selectedCourse}
           onBack={() => setScreen("home")}
           onOpenModules={() => setScreen("modules")}
-          onSearch={() => setScreen("search")}
+          onSearch={() => {}}
         />
       )}
 
@@ -47,7 +42,6 @@ export default function App() {
           onBack={() => setScreen("course")}
         />
       )}
-
     </div>
   );
 }
