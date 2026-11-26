@@ -1,16 +1,13 @@
 
 import {
   BarChart3,
-  BookOpen,
   ChevronDown,
   ClipboardList,
-  Database,
   ExternalLink,
   Layers,
   Megaphone,
-  Network,
-  Palette,
 } from "lucide-react";
+import logo from "../assets/logo.png";
 import type { Course } from "../App";
 
 interface Props {
@@ -22,8 +19,6 @@ interface Props {
     screen: "modules" | "assignments" | "announcements",
   ) => void;
 }
-
-const courseIcons = [BookOpen, Database, Network, Palette];
 
 const destinations = [
   { label: "Modules", path: "modules", icon: Layers },
@@ -42,9 +37,7 @@ export default function HomePage({
     <div className="min-h-screen bg-background p-4">
       <header className="mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-background">
-            <BookOpen size={20} />
-          </div>
+          <img src={logo} alt="Canvas Switcher logo" className="h-10 w-10 object-contain" />
 
           <div>
             <h1 className="text-lg font-bold">Canvas Switcher</h1>
@@ -72,8 +65,7 @@ export default function HomePage({
 
       {courses.length > 0 && (
         <div className="space-y-2">
-          {courses.map((course, index) => {
-            const Icon = courseIcons[index % courseIcons.length];
+          {courses.map((course) => {
             const isExpanded = expandedCourseIds.includes(course.id);
 
             return (
@@ -87,9 +79,6 @@ export default function HomePage({
                   onClick={() => onToggleCourse(course.id)}
                   className="group flex w-full items-center gap-3 p-3 text-left transition-colors hover:bg-surface-hover"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                    <Icon size={20} />
-                  </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs text-text-secondary">{course.code}</p>
                     <p className="mt-1 line-clamp-2 text-sm font-medium leading-snug">

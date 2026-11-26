@@ -45,10 +45,6 @@ export default function AnnouncementPage({
 
       {/* Page heading */}
       <div className="mb-6">
-        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
-          <Megaphone size={22} />
-        </div>
-
         <h1 className="text-lg font-bold">
           Announcements
         </h1>

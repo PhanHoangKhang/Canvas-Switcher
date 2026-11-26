@@ -41,9 +41,6 @@ export default function AssignmentPage({
       </div>
 
       <div className="mb-6">
-        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
-          <ClipboardList size={22} />
-        </div>
         <h1 className="text-lg font-bold">Assignments</h1>
         <p className="mt-1 text-xs text-text-secondary">{course.name}</p>
       </div>
