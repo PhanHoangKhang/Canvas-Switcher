@@ -60,4 +60,4 @@ Canvas Switcher is an independent student-developed project. It is not affiliate
 
 If you have questions, feedback or privacy concerns, you can contact the developer through the project's GitHub repository:
 
-[GitHub Issues](https://github.com/PhanHoangKhang/Canvas-Switcher/issues)
+https://github.com/PhanHoangKhang/Canvas-Switcher/issues
