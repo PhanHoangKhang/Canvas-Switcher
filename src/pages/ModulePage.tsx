@@ -1,4 +1,3 @@
-
 import {
   ArrowLeft,
   ExternalLink,
@@ -125,10 +124,14 @@ function ContentIcon({ type }: { type: ModuleContent["type"] }) {
   return <FileText size={17} />;
 }
 
-export default function ModulePage({
-  course,
-  onBack,
-}: Props) {
+function navigateToCanvas(url: string) {
+  chrome.runtime.sendMessage({
+    type: "NAVIGATE_CANVAS",
+    url,
+  });
+}
+
+export default function ModulePage({ course, onBack }: Props) {
   return (
     <div className="min-h-screen bg-background p-4">
       <button
@@ -140,9 +143,7 @@ export default function ModulePage({
       </button>
 
       <div className="mb-6">
-        <h1 className="text-lg font-bold">
-          Modules
-        </h1>
+        <h1 className="text-lg font-bold">Modules</h1>
 
         <p className="mt-2 text-xs leading-relaxed text-text-secondary">
           {course.name}
@@ -156,10 +157,7 @@ export default function ModulePage({
             className="rounded-xl border border-border bg-surface p-3"
           >
             <div className="mb-3 flex items-start gap-2">
-              <Folder
-                size={18}
-                className="mt-0.5 shrink-0 text-accent"
-              />
+              <Folder size={18} className="mt-0.5 shrink-0 text-accent" />
 
               <h2 className="text-sm font-semibold leading-snug">
                 {module.title}
@@ -168,21 +166,17 @@ export default function ModulePage({
 
             <div className="space-y-1">
               {module.contents.map((content) => (
-                <a
+                <button
                   key={content.id}
-                  href={content.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-3 rounded-lg p-2.5 transition hover:bg-surface-hover"
+                  onClick={() => navigateToCanvas(content.url)}
+                  className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition hover:bg-surface-hover"
                 >
                   <span className="shrink-0 text-accent">
                     <ContentIcon type={content.type} />
                   </span>
 
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm leading-snug">
-                      {content.title}
-                    </p>
+                    <p className="text-sm leading-snug">{content.title}</p>
 
                     <p className="mt-1 text-xs text-text-muted">
                       {content.type}
@@ -193,7 +187,7 @@ export default function ModulePage({
                     size={15}
                     className="shrink-0 text-text-muted"
                   />
-                </a>
+                </button>
               ))}
             </div>
           </div>
