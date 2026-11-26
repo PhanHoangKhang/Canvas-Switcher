@@ -1,6 +1,8 @@
 
 console.log("Canvas Switcher content script loaded");
 
+const COURSE_REQUEST_TIMEOUT_MS = 30_000;
+
 const hostname = window.location.hostname;
 const isCanvasPage = hostname.endsWith(".instructure.com");
 
@@ -24,10 +26,22 @@ chrome.runtime.onMessage.addListener(
 
     // Fetch courses from Canvas API
     if (message.type === "GET_COURSES") {
-      fetch(`${window.location.origin}/api/v1/courses?per_page=100`, {
-        credentials: "include",
-      })
-        .then(async (response) => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        COURSE_REQUEST_TIMEOUT_MS,
+      );
+
+      (async () => {
+        try {
+          const response = await fetch(
+            `${window.location.origin}/api/v1/courses?per_page=100`,
+            {
+              credentials: "include",
+              signal: controller.signal,
+            },
+          );
+
           if (response.redirected) {
             throw new Error("UNAUTHENTICATED");
           }
@@ -52,16 +66,20 @@ chrome.runtime.onMessage.addListener(
             success: true,
             data,
           });
-        })
-        .catch((error) => {
+        } catch (error) {
           sendResponse({
             success: false,
             error:
-              error instanceof Error
-                ? error.message
-                : "FAILED_TO_FETCH",
+              error instanceof Error && error.name === "AbortError"
+                ? "Request timed out. Canvas took too long to respond. Please try again."
+                : error instanceof Error
+                  ? error.message
+                  : "FAILED_TO_FETCH",
           });
-        });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      })();
 
       return true;
     }
