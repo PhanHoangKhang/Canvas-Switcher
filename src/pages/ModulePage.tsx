@@ -113,27 +113,36 @@ export default function ModulePage({
 
               {module.items && module.items.length > 0 ? (
                 <div className="space-y-1">
-                  {module.items.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => navigateToCanvas(getItemUrl(course.id, item))}
-                      className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition hover:bg-surface-hover"
-                    >
-                      <span className="shrink-0 text-accent">
-                        <ContentIcon type={item.type} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm leading-snug">{item.title}</p>
-                        <p className="mt-1 text-xs text-text-muted">
-                          {item.type}
-                        </p>
-                      </div>
-                      <ExternalLink
-                        size={15}
-                        className="shrink-0 text-text-muted"
-                      />
-                    </button>
-                  ))}
+                  {module.items.map((item) =>
+                    item.type.toLowerCase() === "subheader" ? (
+                      <h3
+                        key={item.id}
+                        className="px-2.5 py-2 text-sm font-semibold leading-snug"
+                      >
+                        {item.title}
+                      </h3>
+                    ) : (
+                      <button
+                        key={item.id}
+                        onClick={() => navigateToCanvas(getItemUrl(course.id, item))}
+                        className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition hover:bg-surface-hover"
+                      >
+                        <span className="shrink-0 text-accent">
+                          <ContentIcon type={item.type} />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm leading-snug">{item.title}</p>
+                          <p className="mt-1 text-xs text-text-muted">
+                            {item.type}
+                          </p>
+                        </div>
+                        <ExternalLink
+                          size={15}
+                          className="shrink-0 text-text-muted"
+                        />
+                      </button>
+                    ),
+                  )}
                 </div>
               ) : (
                 <p className="pl-7 text-xs text-text-muted">No items in this module.</p>
