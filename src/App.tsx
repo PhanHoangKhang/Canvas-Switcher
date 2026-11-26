@@ -91,7 +91,6 @@ export default function App() {
               course={selectedCourse}
               onBack={() => setScreen("home")}
               onOpenModules={() => setScreen("modules")}
-              onSearch={() => {}}
             />
           )}
 
