@@ -1,127 +1,56 @@
+import { useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft,
+  ClipboardList,
   ExternalLink,
   FileText,
-  ClipboardList,
   Folder,
+  RefreshCw,
 } from "lucide-react";
 import type { Course } from "../App";
+import {
+  getCourseModules,
+  type CourseModule,
+  type CourseModuleItem,
+} from "../services/canvasService";
 
 interface Props {
   course: Course;
   onBack: () => void;
 }
 
-interface ModuleContent {
-  id: number;
-  title: string;
-  type: "Page" | "Assignment" | "File";
-  url: string;
-}
-
-interface Module {
-  id: number;
-  title: string;
-  contents: ModuleContent[];
-}
-
-const modules: Module[] = [
-  {
-    id: 1,
-    title: "Getting Started",
-    contents: [
-      {
-        id: 101,
-        title: "Course Introduction",
-        type: "Page",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "Week 1 - Software Processes Overview",
-    contents: [
-      {
-        id: 201,
-        title: "Software Processes Overview",
-        type: "Page",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-      {
-        id: 202,
-        title: "Lecture Slides",
-        type: "File",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "Week 2 - Agile Processes & User Stories",
-    contents: [
-      {
-        id: 301,
-        title: "Agile Processes",
-        type: "Page",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-      {
-        id: 302,
-        title: "User Story Assignment",
-        type: "Assignment",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "Week 3 - Version Control",
-    contents: [
-      {
-        id: 401,
-        title: "Git Fundamentals",
-        type: "Page",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-      {
-        id: 402,
-        title: "Git Branching",
-        type: "Page",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-      {
-        id: 403,
-        title: "Git Practice Assignment",
-        type: "Assignment",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-    ],
-  },
-  {
-    id: 5,
-    title: "Week 4 - Architecture Patterns",
-    contents: [
-      {
-        id: 501,
-        title: "Architecture Patterns",
-        type: "Page",
-        url: "https://rmit.instructure.com/courses/181740",
-      },
-    ],
-  },
-];
-
-function ContentIcon({ type }: { type: ModuleContent["type"] }) {
-  if (type === "Assignment") {
+function ContentIcon({ type }: { type: string }) {
+  if (type.toLowerCase().includes("assignment")) {
     return <ClipboardList size={17} />;
   }
 
-  if (type === "File") {
+  if (type.toLowerCase().includes("file")) {
     return <Folder size={17} />;
   }
 
   return <FileText size={17} />;
+}
+
+function getItemUrl(courseId: number, item: CourseModuleItem) {
+  if (item.html_url) return item.html_url;
+  if (item.external_url) return item.external_url;
+
+  const baseUrl = `https://rmit.instructure.com/courses/${courseId}`;
+  const type = item.type.toLowerCase();
+
+  if (type === "page" && item.page_url) {
+    return `${baseUrl}/pages/${encodeURIComponent(item.page_url)}`;
+  }
+
+  if (type === "assignment" && item.content_id) {
+    return `${baseUrl}/assignments/${item.content_id}`;
+  }
+
+  if (type === "file" && item.content_id) {
+    return `${baseUrl}/files/${item.content_id}`;
+  }
+
+  return `${baseUrl}/modules/items/${item.id}`;
 }
 
 function navigateToCanvas(url: string) {
@@ -132,67 +61,124 @@ function navigateToCanvas(url: string) {
 }
 
 export default function ModulePage({ course, onBack }: Props) {
+  const [modules, setModules] = useState<CourseModule[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchModules = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      setModules(await getCourseModules(course.id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load modules");
+    } finally {
+      setLoading(false);
+    }
+  }, [course.id]);
+
+  useEffect(() => {
+    void fetchModules();
+  }, [fetchModules]);
+
   return (
     <div className="min-h-screen bg-background p-4">
-      <button
-        onClick={onBack}
-        className="mb-5 flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
-      >
-        <ArrowLeft size={16} />
-        Back
-      </button>
+      <div className="mb-5 flex items-center justify-between">
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
+        >
+          <ArrowLeft size={16} />
+          Course
+        </button>
+
+        <button
+          onClick={() => void fetchModules()}
+          disabled={loading}
+          title="Refresh modules"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted transition hover:bg-surface-hover hover:text-accent disabled:opacity-50"
+        >
+          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+        </button>
+      </div>
 
       <div className="mb-6">
         <h1 className="text-lg font-bold">Modules</h1>
-
         <p className="mt-2 text-xs leading-relaxed text-text-secondary">
           {course.name}
         </p>
       </div>
 
-      <div className="space-y-3">
-        {modules.map((module) => (
-          <div
-            key={module.id}
-            className="rounded-xl border border-border bg-surface p-3"
+      {loading && (
+        <div className="py-10 text-center text-sm text-text-secondary" role="status">
+          Loading modules...
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="rounded-xl border border-border bg-surface p-4">
+          <p className="text-sm font-medium">Unable to load modules</p>
+          <p className="mt-2 break-words text-xs text-text-secondary">{error}</p>
+          <button
+            onClick={() => void fetchModules()}
+            className="mt-4 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-background"
           >
-            <div className="mb-3 flex items-start gap-2">
-              <Folder size={18} className="mt-0.5 shrink-0 text-accent" />
+            Try again
+          </button>
+        </div>
+      )}
 
-              <h2 className="text-sm font-semibold leading-snug">
-                {module.title}
-              </h2>
+      {!loading && !error && modules.length === 0 && (
+        <div className="py-10 text-center text-sm text-text-secondary">
+          No modules found.
+        </div>
+      )}
+
+      {!loading && !error && modules.length > 0 && (
+        <div className="space-y-3">
+          {modules.map((module) => (
+            <div
+              key={module.id}
+              className="rounded-xl border border-border bg-surface p-3"
+            >
+              <div className="mb-3 flex items-start gap-2">
+                <Folder size={18} className="mt-0.5 shrink-0 text-accent" />
+                <h2 className="text-sm font-semibold leading-snug">
+                  {module.name}
+                </h2>
+              </div>
+
+              {module.items && module.items.length > 0 ? (
+                <div className="space-y-1">
+                  {module.items.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => navigateToCanvas(getItemUrl(course.id, item))}
+                      className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition hover:bg-surface-hover"
+                    >
+                      <span className="shrink-0 text-accent">
+                        <ContentIcon type={item.type} />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm leading-snug">{item.title}</p>
+                        <p className="mt-1 text-xs text-text-muted">
+                          {item.type}
+                        </p>
+                      </div>
+                      <ExternalLink
+                        size={15}
+                        className="shrink-0 text-text-muted"
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="pl-7 text-xs text-text-muted">No items in this module.</p>
+              )}
             </div>
-
-            <div className="space-y-1">
-              {module.contents.map((content) => (
-                <button
-                  key={content.id}
-                  onClick={() => navigateToCanvas(content.url)}
-                  className="flex w-full items-center gap-3 rounded-lg p-2.5 text-left transition hover:bg-surface-hover"
-                >
-                  <span className="shrink-0 text-accent">
-                    <ContentIcon type={content.type} />
-                  </span>
-
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm leading-snug">{content.title}</p>
-
-                    <p className="mt-1 text-xs text-text-muted">
-                      {content.type}
-                    </p>
-                  </div>
-
-                  <ExternalLink
-                    size={15}
-                    className="shrink-0 text-text-muted"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
