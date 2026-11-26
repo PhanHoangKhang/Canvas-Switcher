@@ -26,7 +26,7 @@ export default function LoginPage({ error }: LoginPageProps) {
 
       <button
         onClick={handleLogin}
-        className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-[#ffe45c] px-4 py-3 text-sm font-bold text-gray-900 transition hover:bg-[#f5d940]"
+        className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-bold text-gray-900 transition hover:bg-accent-hover"
       >
         Login to Canvas
         <ExternalLink size={16} />

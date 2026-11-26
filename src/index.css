@@ -4,11 +4,11 @@
 @theme {
   --color-background: #ffffff;
   --color-surface: #f5f5f7;
-  --color-surface-hover: #fffbea;
+  --color-surface-hover: #f7f2ff;
   --color-border: #e5e5e5;
 
-  --color-accent: #ffe45c;
-  --color-accent-hover: #f5d742;
+  --color-accent: #9d65fd;
+  --color-accent-hover: #8748ed;
 
   --color-text-primary: #12121f;
   --color-text-secondary: #737373;
