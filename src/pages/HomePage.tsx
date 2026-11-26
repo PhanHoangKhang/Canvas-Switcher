@@ -8,6 +8,7 @@ import {
   Search,
 } from "lucide-react";
 import type { Course } from "../App";
+import CourseSkeleton from "../components/CourseSkeleton";
 import { getCourses } from "../services/courseService";
 
 interface Props {
@@ -112,11 +113,7 @@ export default function HomePage({ onSelectCourse }: Props) {
         </span>
       </div>
 
-      {loading && (
-        <div className="py-10 text-center text-sm text-text-secondary">
-          Loading courses...
-        </div>
-      )}
+      {loading && <CourseSkeleton />}
 
       {error && !loading && (
         <div className="rounded-xl border border-border bg-surface p-4">
