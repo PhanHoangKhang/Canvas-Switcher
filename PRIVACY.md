@@ -2,60 +2,62 @@
 
 **Last updated: 26 November 2026**
 
-Canvas Switcher is a Chrome extension that helps students navigate RMIT Canvas courses and learning resources more efficiently through Chrome's side panel.
+Canvas Switcher is a Chrome extension designed to help you navigate RMIT Canvas more quickly and conveniently through Chrome's side panel.
 
-## What it accesses
+Your privacy matters. Canvas Switcher is built to provide quick access to Canvas course resources without collecting, storing or sending your Canvas data to the developer.
 
-When you use Canvas Switcher, the extension interacts with RMIT Canvas (`https://rmit.instructure.com`) using your existing Canvas session.
+## What Canvas Switcher does
 
-It may access:
+Canvas Switcher allows you to view your available Canvas courses and quickly navigate to different course sections without repeatedly navigating through the Canvas interface.
 
-- Your Canvas course list, including course names and course IDs, to display available courses.
-- Course navigation destinations, such as Modules, Assignments, Announcements, Grades and other supported Canvas resources, when you choose them.
-- Information returned by Canvas that is necessary to display or support the extension's navigation features.
+When you use the extension, it accesses your Canvas session to:
 
-Canvas Switcher does not ask for your Canvas password. It relies on your existing authenticated Canvas session in Chrome.
+- Retrieve your available courses so you can view them within Canvas Switcher.
+- Identify the course you select.
+- Open course resources such as Modules, Assignments, Announcements and Grades when you choose to navigate to them.
+
+Canvas Switcher uses your existing Canvas login session in Chrome. You do not need to provide your Canvas username or password to the extension.
 
 ## Permissions
 
-Canvas Switcher requests the following Chrome permissions:
+Canvas Switcher requests the following Chrome permissions, which are used solely to support its functionality:
 
-- **Side Panel (`sidePanel`):** Displays the extension interface in Chrome's side panel so you can access Canvas navigation tools alongside the Canvas website.
-- **Tabs (`tabs`):** Allows the extension to locate open Canvas tabs, communicate with a Canvas tab where its content script is available, and navigate to Canvas pages when you select a destination.
-- **Storage (`storage`):** Allows the extension to use Chrome's local storage functionality for extension data or preferences, where implemented.
-- **Active Tab (`activeTab`):** Provides temporary access to the active tab following user interaction, where required by the extension's functionality.
-- **Host permission (`https://rmit.instructure.com/*`):** Allows the extension to interact with RMIT Canvas to retrieve the information needed for its navigation features.
+- **Side Panel (`sidePanel`):** Displays Canvas Switcher in Chrome's side panel, allowing you to access navigation tools alongside Canvas.
+- **Tabs (`tabs`):** Allows the extension to locate open Canvas tabs, communicate with a Canvas tab and navigate to Canvas pages when you select a destination.
+- **Storage (`storage`):** Used for extension data stored through Chrome's storage functionality, if applicable to the extension's features.
+- **Active Tab (`activeTab`):** Provides temporary access to the active tab following user interaction, if required by the extension.
+- **Host permission (`https://rmit.instructure.com/*`):** Allows Canvas Switcher to interact with RMIT Canvas to retrieve the information required for its navigation features.
 
-These permissions are used to provide the extension's core functionality and are not intended to access unrelated websites.
+These permissions are not used to access unrelated websites or collect data for purposes unrelated to Canvas Switcher.
 
-## Where your data goes
+## Data collection and storage
 
-Canvas Switcher interacts with RMIT Canvas through your browser and your authenticated Canvas session.
+Canvas Switcher does not collect, store or transmit your Canvas course data to the developer or to any external server operated by the developer.
 
-The extension is designed to retrieve information necessary for its navigation features. Data handling is limited to what is required for the extension to function.
+Your course information is retrieved directly from Canvas through your browser and is used only to display courses and support navigation within the extension.
 
-Canvas Switcher does not sell personal information or use accessed Canvas information for advertising.
+Canvas Switcher does not maintain a database of your courses, assignments, grades or other Canvas information.
 
-## What it stores
+The extension does not use analytics, tracking technologies or advertising.
 
-Canvas Switcher may use Chrome's storage or temporary in-memory state for extension functionality, depending on the features implemented in the installed version.
+## What Canvas Switcher does not do
 
-Information that is not needed after a navigation action is completed is not intended to be retained.
+- It does not collect, sell or share your personal information.
+- It does not store your Canvas course data on developer-operated servers.
+- It does not send your Canvas data to the developer.
+- It does not ask for or store your Canvas password.
+- It does not track your browsing activity on unrelated websites.
+- It does not modify your courses, assignments, grades or submissions.
+- It does not bypass Canvas access controls or access information you are not authorized to view.
 
-## What it does not do
-
-- It does not collect or sell personal information for advertising.
-- It does not request your Canvas password.
-- It does not intentionally access unrelated websites.
-- It does not modify your Canvas course content, assignments, grades or submissions.
-- It is not intended to bypass Canvas access controls or permissions.
+Canvas Switcher only accesses Canvas information necessary for the features you actively use.
 
 ## Not affiliated
 
-Canvas Switcher is an independent student-developed Chrome extension. It is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.
+Canvas Switcher is an independent student-developed project. It is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.
 
 ## Contact
 
-Questions, feedback or privacy concerns can be submitted through the project's GitHub repository.
+If you have questions, feedback or privacy concerns, you can contact the developer through the project's GitHub repository:
 
-[GitHub Repository](https://github.com/PhanHoangKhang/Canvas-Switcher/issues)
+[GitHub Issues](https://github.com/PhanHoangKhang/Canvas-Switcher/issues)
