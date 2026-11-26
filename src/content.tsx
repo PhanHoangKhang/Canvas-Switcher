@@ -24,20 +24,30 @@ chrome.runtime.onMessage.addListener(
 
     // Fetch courses from Canvas API
     if (message.type === "GET_COURSES") {
-      fetch(
-        `${window.location.origin}/api/v1/courses?per_page=100`,
-        {
-          credentials: "include",
-        },
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error: ${response.status}`);
+      fetch(`${window.location.origin}/api/v1/courses?per_page=100`, {
+        credentials: "include",
+      })
+        .then(async (response) => {
+          if (response.redirected) {
+            throw new Error("UNAUTHENTICATED");
           }
 
-          return response.json();
-        })
-        .then((data) => {
+          if (!response.ok) {
+            throw new Error(`HTTP_${response.status}`);
+          }
+
+          const contentType = response.headers.get("content-type");
+
+          if (!contentType?.includes("application/json")) {
+            throw new Error("UNAUTHENTICATED");
+          }
+
+          const data = await response.json();
+
+          if (!Array.isArray(data)) {
+            throw new Error("INVALID_RESPONSE");
+          }
+
           sendResponse({
             success: true,
             data,
@@ -49,11 +59,10 @@ chrome.runtime.onMessage.addListener(
             error:
               error instanceof Error
                 ? error.message
-                : "Failed to fetch courses",
+                : "FAILED_TO_FETCH",
           });
         });
 
-      // Keep the message channel open for the asynchronous response
       return true;
     }
   },

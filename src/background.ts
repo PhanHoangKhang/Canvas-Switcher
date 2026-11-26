@@ -10,29 +10,63 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     chrome.tabs.query(
       { url: "https://rmit.instructure.com/*" },
       (tabs) => {
-        const canvasTab = tabs[0];
+        chrome.tabs.query(
+          {
+            active: true,
+            lastFocusedWindow: true,
+            url: "https://rmit.instructure.com/*",
+          },
+          (activeCanvasTabs) => {
+            const activeCanvasTab = activeCanvasTabs[0];
+            const canvasTabs = activeCanvasTab
+              ? [
+                  activeCanvasTab,
+                  ...tabs.filter((tab) => tab.id !== activeCanvasTab.id),
+                ]
+              : tabs;
 
-        if (!canvasTab?.id) {
-          sendResponse({
-            success: false,
-            error: "No Canvas tab found. Please open Canvas first.",
-          });
-          return;
-        }
-
-        chrome.tabs.sendMessage(
-          canvasTab.id,
-          { type: "GET_COURSES" },
-          (response) => {
-            if (chrome.runtime.lastError) {
+            if (canvasTabs.length === 0) {
               sendResponse({
                 success: false,
-                error: chrome.runtime.lastError.message,
+                error: "No Canvas tab found. Please open Canvas first.",
               });
               return;
             }
 
-            sendResponse(response);
+            const sendToCanvasTab = (index: number) => {
+              const canvasTab = canvasTabs[index];
+
+              if (!canvasTab?.id) {
+                sendResponse({
+                  success: false,
+                  error: "No usable Canvas tab found. Reload Canvas and try again.",
+                });
+                return;
+              }
+
+              chrome.tabs.sendMessage(
+                canvasTab.id,
+                { type: "GET_COURSES" },
+                (response) => {
+                  if (chrome.runtime.lastError) {
+                    if (index + 1 < canvasTabs.length) {
+                      sendToCanvasTab(index + 1);
+                      return;
+                    }
+
+                    sendResponse({
+                      success: false,
+                      error: `${chrome.runtime.lastError.message} Reload Canvas and try again.`,
+                    });
+                    return;
+                  }
+
+                  sendResponse(response);
+                },
+              );
+            };
+
+            sendToCanvasTab(0);
           },
         );
       },
