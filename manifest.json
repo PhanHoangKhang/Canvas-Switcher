@@ -1,0 +1,35 @@
+
+{
+  "manifest_version": 3,
+  "name": "Canvas Switcher",
+  "version": "0.1.0",
+  "description": "Navigate Canvas faster.",
+  "permissions": [
+    "sidePanel",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://rmit.instructure.com/*"
+  ],
+  "action": {
+    "default_title": "Canvas Switcher"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://rmit.instructure.com/*"
+      ],
+      "js": [
+        "src/content.tsx"
+      ]
+    }
+  ]
+}
