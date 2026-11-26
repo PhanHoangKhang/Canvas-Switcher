@@ -104,7 +104,7 @@ export default function AnnouncementPage({
       {/* Footer */}
       <footer className="mt-6 border-t border-border pt-4">
         <p className="text-center text-xs text-text-muted">
-          Canvas Switcher · Beta
+          Canvas Switcher
         </p>
       </footer>
     </div>

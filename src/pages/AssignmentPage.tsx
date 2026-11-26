@@ -77,7 +77,7 @@ export default function AssignmentPage({
       )}
 
       <footer className="mt-6 border-t border-border pt-4">
-        <p className="text-center text-xs text-text-muted">Canvas Switcher · Beta</p>
+        <p className="text-center text-xs text-text-muted">Canvas Switcher</p>
       </footer>
     </div>
   );

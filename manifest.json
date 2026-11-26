@@ -14,7 +14,8 @@
     "https://rmit.instructure.com/*"
   ],
   "action": {
-    "default_title": "Canvas Switcher"
+    "default_title": "Canvas Switcher",
+    "default_icon": "logo.png"
   },
   "side_panel": {
     "default_path": "index.html"
@@ -32,5 +33,8 @@
         "src/content.tsx"
       ]
     }
-  ]
+  ],
+  "icons": {
+    "128": "logo.png"
+  }
 }
