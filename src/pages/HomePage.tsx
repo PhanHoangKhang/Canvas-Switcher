@@ -1,5 +1,4 @@
 
-import { useEffect, useState } from "react";
 import {
   BarChart3,
   BookOpen,
@@ -13,10 +12,9 @@ import {
   Palette,
 } from "lucide-react";
 import type { Course } from "../App";
-import CourseSkeleton from "../components/CourseSkeleton";
-import { getCourses } from "../services/courseService";
 
 interface Props {
+  courses: Course[];
   expandedCourseIds: number[];
   onToggleCourse: (courseId: number) => void;
   onNavigate: (
@@ -35,52 +33,11 @@ const destinations = [
 ] as const;
 
 export default function HomePage({
+  courses,
   expandedCourseIds,
   onToggleCourse,
   onNavigate,
 }: Props) {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchCourses() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const data = await getCourses();
-
-        const currentCourses = data.filter((course) => {
-          const now = new Date();
-
-          const isStarted =
-            !course.start_at || new Date(course.start_at) <= now;
-
-          const isNotEnded = !course.end_at || new Date(course.end_at) >= now;
-
-          return (
-            course.workflow_state === "available" && isStarted && isNotEnded
-          );
-        });
-
-        const mappedCourses: Course[] = currentCourses.map((course) => ({
-          id: course.id,
-          name: course.name,
-          code: course.course_code,
-        }));
-
-        setCourses(mappedCourses);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load courses");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchCourses();
-  }, []);
-
   return (
     <div className="min-h-screen bg-background p-4">
       <header className="mb-6">
@@ -103,29 +60,17 @@ export default function HomePage({
         <h2 className="text-sm font-semibold">My Courses</h2>
 
         <span className="text-xs text-text-muted">
-          {loading ? "..." : courses.length}
+          {courses.length}
         </span>
       </div>
 
-      {loading && <CourseSkeleton />}
-
-      {error && !loading && (
-        <div className="rounded-xl border border-border bg-surface p-4">
-          <p className="text-sm font-medium">Unable to load courses</p>
-
-          <p className="mt-2 text-xs text-text-secondary break-words">
-            {error}
-          </p>
-        </div>
-      )}
-
-      {!loading && !error && courses.length === 0 && (
+      {courses.length === 0 && (
         <div className="py-10 text-center text-sm text-text-secondary">
           No courses found.
         </div>
       )}
 
-      {!loading && !error && (
+      {courses.length > 0 && (
         <div className="space-y-2">
           {courses.map((course, index) => {
             const Icon = courseIcons[index % courseIcons.length];

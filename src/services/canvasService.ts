@@ -1,5 +1,5 @@
 
-interface Announcement {
+export interface CourseAnnouncement {
   id: number;
   title: string;
   message: string;
@@ -34,9 +34,18 @@ export interface CourseModule {
   items?: CourseModuleItem[];
 }
 
+export type CourseContentKey = "modules" | "assignments" | "announcements";
+
+export interface CourseContentData {
+  modules: CourseModule[];
+  assignments: CourseAssignment[];
+  announcements: CourseAnnouncement[];
+  errors: Partial<Record<CourseContentKey, string>>;
+}
+
 export async function getCourseAnnouncements(
   courseId: number,
-): Promise<Announcement[]> {
+): Promise<CourseAnnouncement[]> {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(
       {
@@ -56,7 +65,12 @@ export async function getCourseAnnouncements(
           return;
         }
 
-        resolve(response.data as Announcement[]);
+        if (!Array.isArray(response.data)) {
+          reject(new Error("Invalid announcements response"));
+          return;
+        }
+
+        resolve(response.data as CourseAnnouncement[]);
       },
     );
   });

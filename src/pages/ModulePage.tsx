@@ -1,15 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft,
   ClipboardList,
   ExternalLink,
   FileText,
   Folder,
-  RefreshCw,
 } from "lucide-react";
 import type { Course } from "../App";
 import {
-  getCourseModules,
   type CourseModule,
   type CourseModuleItem,
 } from "../services/canvasService";
@@ -17,6 +14,8 @@ import {
 interface Props {
   course: Course;
   onBack: () => void;
+  modules: CourseModule[];
+  error?: string;
 }
 
 function ContentIcon({ type }: { type: string }) {
@@ -60,45 +59,21 @@ function navigateToCanvas(url: string) {
   });
 }
 
-export default function ModulePage({ course, onBack }: Props) {
-  const [modules, setModules] = useState<CourseModule[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchModules = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      setModules(await getCourseModules(course.id));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load modules");
-    } finally {
-      setLoading(false);
-    }
-  }, [course.id]);
-
-  useEffect(() => {
-    void fetchModules();
-  }, [fetchModules]);
-
+export default function ModulePage({
+  course,
+  onBack,
+  modules,
+  error,
+}: Props) {
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-5">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
         >
           <ArrowLeft size={16} />
-          Course
-        </button>
-
-        <button
-          onClick={() => void fetchModules()}
-          disabled={loading}
-          title="Refresh modules"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted transition hover:bg-surface-hover hover:text-accent disabled:opacity-50"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          Courses
         </button>
       </div>
 
@@ -109,32 +84,20 @@ export default function ModulePage({ course, onBack }: Props) {
         </p>
       </div>
 
-      {loading && (
-        <div className="py-10 text-center text-sm text-text-secondary" role="status">
-          Loading modules...
-        </div>
-      )}
-
-      {error && !loading && (
+      {error && (
         <div className="rounded-xl border border-border bg-surface p-4">
           <p className="text-sm font-medium">Unable to load modules</p>
           <p className="mt-2 break-words text-xs text-text-secondary">{error}</p>
-          <button
-            onClick={() => void fetchModules()}
-            className="mt-4 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-background"
-          >
-            Try again
-          </button>
         </div>
       )}
 
-      {!loading && !error && modules.length === 0 && (
+      {!error && modules.length === 0 && (
         <div className="py-10 text-center text-sm text-text-secondary">
           No modules found.
         </div>
       )}
 
-      {!loading && !error && modules.length > 0 && (
+      {!error && modules.length > 0 && (
         <div className="space-y-3">
           {modules.map((module) => (
             <div

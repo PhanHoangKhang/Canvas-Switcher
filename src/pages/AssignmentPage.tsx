@@ -1,42 +1,24 @@
-import { useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft,
   ClipboardList,
   ExternalLink,
-  RefreshCw,
 } from "lucide-react";
 import type { Course } from "../App";
-import {
-  getCourseAssignments,
-  type CourseAssignment,
-} from "../services/canvasService";
+import type { CourseAssignment } from "../services/canvasService";
 
 interface Props {
   course: Course;
   onBack: () => void;
+  assignments: CourseAssignment[];
+  error?: string;
 }
 
-export default function AssignmentPage({ course, onBack }: Props) {
-  const [assignments, setAssignments] = useState<CourseAssignment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchAssignments = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      setAssignments(await getCourseAssignments(course.id));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load assignments");
-    } finally {
-      setLoading(false);
-    }
-  }, [course.id]);
-
-  useEffect(() => {
-    void fetchAssignments();
-  }, [fetchAssignments]);
-
+export default function AssignmentPage({
+  course,
+  onBack,
+  assignments,
+  error,
+}: Props) {
   const openAssignment = (assignment: CourseAssignment) => {
     chrome.runtime.sendMessage({
       type: "NAVIGATE_CANVAS",
@@ -48,22 +30,13 @@ export default function AssignmentPage({ course, onBack }: Props) {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-5">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
         >
           <ArrowLeft size={16} />
-          Course
-        </button>
-
-        <button
-          onClick={() => void fetchAssignments()}
-          disabled={loading}
-          title="Refresh assignments"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted transition hover:bg-surface-hover hover:text-accent disabled:opacity-50"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          Courses
         </button>
       </div>
 
@@ -75,32 +48,20 @@ export default function AssignmentPage({ course, onBack }: Props) {
         <p className="mt-1 text-xs text-text-secondary">{course.name}</p>
       </div>
 
-      {loading && (
-        <div className="py-10 text-center text-sm text-text-secondary" role="status">
-          Loading assignments...
-        </div>
-      )}
-
-      {error && !loading && (
+      {error && (
         <div className="rounded-xl border border-border bg-surface p-4">
           <p className="text-sm font-medium">Unable to load assignments</p>
           <p className="mt-2 break-words text-xs text-text-secondary">{error}</p>
-          <button
-            onClick={() => void fetchAssignments()}
-            className="mt-4 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-background"
-          >
-            Try again
-          </button>
         </div>
       )}
 
-      {!loading && !error && assignments.length === 0 && (
+      {!error && assignments.length === 0 && (
         <div className="py-10 text-center text-sm text-text-secondary">
           No assignments found.
         </div>
       )}
 
-      {!loading && !error && assignments.length > 0 && (
+      {!error && assignments.length > 0 && (
         <div className="space-y-3">
           {assignments.map((assignment) => (
             <button

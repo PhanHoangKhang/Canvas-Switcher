@@ -1,59 +1,27 @@
 
-import { useCallback, useEffect, useState } from "react";
 import {
   ArrowLeft,
   Megaphone,
-  RefreshCw,
   ExternalLink,
 } from "lucide-react";
 
 import type { Course } from "../App";
-import { getCourseAnnouncements } from "../services/canvasService";
+import type { CourseAnnouncement } from "../services/canvasService";
 
 interface Props {
   course: Course;
   onBack: () => void;
-}
-
-interface Announcement {
-  id: number;
-  title: string;
-  message: string;
-  posted_at: string;
-  html_url?: string;
+  announcements: CourseAnnouncement[];
+  error?: string;
 }
 
 export default function AnnouncementPage({
   course,
   onBack,
+  announcements,
+  error,
 }: Props) {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchAnnouncements = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const data = await getCourseAnnouncements(course.id);
-      setAnnouncements(data);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to load announcements",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [course.id]);
-
-  useEffect(() => {
-    void fetchAnnouncements();
-  }, [fetchAnnouncements]);
-
-  const openAnnouncement = (announcement: Announcement) => {
+  const openAnnouncement = (announcement: CourseAnnouncement) => {
     chrome.runtime.sendMessage({
       type: "NAVIGATE_CANVAS",
       url:
@@ -65,25 +33,13 @@ export default function AnnouncementPage({
   return (
     <div className="min-h-screen p-4">
       {/* Header actions */}
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-5">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
         >
           <ArrowLeft size={16} />
-          Course
-        </button>
-
-        <button
-          onClick={() => void fetchAnnouncements()}
-          disabled={loading}
-          title="Refresh announcements"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-text-muted transition hover:bg-surface-hover hover:text-accent disabled:opacity-50"
-        >
-          <RefreshCw
-            size={16}
-            className={loading ? "animate-spin" : ""}
-          />
+          Courses
         </button>
       </div>
 
@@ -102,19 +58,8 @@ export default function AnnouncementPage({
         </p>
       </div>
 
-      {/* Loading */}
-      {loading && (
-        <div className="py-12 text-center">
-          <div className="mx-auto h-7 w-7 animate-spin rounded-full border-4 border-gray-200 border-t-[#9D65FD]" />
-
-          <p className="mt-3 text-sm text-text-secondary">
-            Loading announcements...
-          </p>
-        </div>
-      )}
-
       {/* Error */}
-      {error && !loading && (
+      {error && (
         <div className="rounded-xl border border-border bg-surface p-4">
           <p className="text-sm font-medium">
             Unable to load announcements
@@ -124,17 +69,11 @@ export default function AnnouncementPage({
             {error}
           </p>
 
-          <button
-            onClick={() => void fetchAnnouncements()}
-            className="mt-4 rounded-lg bg-accent px-3 py-2 text-xs font-semibold text-background"
-          >
-            Try again
-          </button>
         </div>
       )}
 
       {/* Empty state */}
-      {!loading && !error && announcements.length === 0 && (
+      {!error && announcements.length === 0 && (
         <div className="py-12 text-center">
           <Megaphone
             size={28}
@@ -148,7 +87,7 @@ export default function AnnouncementPage({
       )}
 
       {/* Announcement list */}
-      {!loading && !error && announcements.length > 0 && (
+      {!error && announcements.length > 0 && (
         <div className="space-y-3">
           {announcements.map((announcement) => (
             <button
