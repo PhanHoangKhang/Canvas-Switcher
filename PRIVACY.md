@@ -1,4 +1,4 @@
-# Canvas Switcher — Privacy Policy
+# Canvas Switcher: Privacy Policy
 
 **Last updated: 26 November 2026**
 
