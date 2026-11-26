@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BookOpen,
   Database,
   Network,
   Palette,
-  Search,
 } from "lucide-react";
 import type { Course } from "../App";
 import CourseSkeleton from "../components/CourseSkeleton";
@@ -21,7 +21,6 @@ export default function HomePage({ onSelectCourse }: Props) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchCourses() {
@@ -61,17 +60,6 @@ export default function HomePage({ onSelectCourse }: Props) {
     fetchCourses();
   }, []);
 
-  const filteredCourses = useMemo(() => {
-    return courses.filter((course) => {
-      const query = searchQuery.toLowerCase();
-
-      return (
-        course.name.toLowerCase().includes(query) ||
-        course.code.toLowerCase().includes(query)
-      );
-    });
-  }, [courses, searchQuery]);
-
   return (
     <div className="min-h-screen bg-background p-4">
       <header className="mb-6">
@@ -90,26 +78,11 @@ export default function HomePage({ onSelectCourse }: Props) {
         </div>
       </header>
 
-      <div className="mb-5 flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-3">
-        <Search size={18} className="text-text-muted" />
-
-        <input
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search courses..."
-          className="w-full bg-transparent text-sm outline-none placeholder:text-text-muted"
-        />
-
-        <span className="rounded-md border border-border px-1.5 py-0.5 text-xs text-text-muted">
-          /
-        </span>
-      </div>
-
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-sm font-semibold">My Courses</h2>
 
         <span className="text-xs text-text-muted">
-          {loading ? "..." : filteredCourses.length}
+          {loading ? "..." : courses.length}
         </span>
       </div>
 
@@ -125,15 +98,15 @@ export default function HomePage({ onSelectCourse }: Props) {
         </div>
       )}
 
-      {!loading && !error && filteredCourses.length === 0 && (
+      {!loading && !error && courses.length === 0 && (
         <div className="py-10 text-center text-sm text-text-secondary">
-          {courses.length === 0 ? "No courses found." : "No matching courses."}
+          No courses found.
         </div>
       )}
 
       {!loading && !error && (
         <div className="space-y-2">
-          {filteredCourses.map((course, index) => {
+          {courses.map((course, index) => {
             const Icon = courseIcons[index % courseIcons.length];
 
             return (
