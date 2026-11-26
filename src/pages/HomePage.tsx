@@ -1,9 +1,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  ArrowRight,
+  BarChart3,
   BookOpen,
+  ChevronDown,
+  ClipboardList,
   Database,
+  ExternalLink,
+  Layers,
+  Megaphone,
   Network,
   Palette,
 } from "lucide-react";
@@ -12,12 +17,28 @@ import CourseSkeleton from "../components/CourseSkeleton";
 import { getCourses } from "../services/courseService";
 
 interface Props {
-  onSelectCourse: (course: Course) => void;
+  expandedCourseIds: number[];
+  onToggleCourse: (courseId: number) => void;
+  onNavigate: (
+    course: Course,
+    screen: "modules" | "assignments" | "announcements",
+  ) => void;
 }
 
 const courseIcons = [BookOpen, Database, Network, Palette];
 
-export default function HomePage({ onSelectCourse }: Props) {
+const destinations = [
+  { label: "Modules", path: "modules", icon: Layers },
+  { label: "Assignments", path: "assignments", icon: ClipboardList },
+  { label: "Announcements", path: "announcements", icon: Megaphone },
+  { label: "Grades", path: "grades", icon: BarChart3 },
+] as const;
+
+export default function HomePage({
+  expandedCourseIds,
+  onToggleCourse,
+  onNavigate,
+}: Props) {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -108,30 +129,77 @@ export default function HomePage({ onSelectCourse }: Props) {
         <div className="space-y-2">
           {courses.map((course, index) => {
             const Icon = courseIcons[index % courseIcons.length];
+            const isExpanded = expandedCourseIds.includes(course.id);
 
             return (
-              <button
+              <section
                 key={course.id}
-                onClick={() => onSelectCourse(course)}
-                className="group flex w-full items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition-all hover:border-accent/50 hover:bg-surface-hover"
+                className="overflow-hidden rounded-xl border border-border bg-surface transition-colors hover:border-accent/50"
               >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                  <Icon size={20} />
-                </div>
+                <button
+                  type="button"
+                  aria-expanded={isExpanded}
+                  onClick={() => onToggleCourse(course.id)}
+                  className="group flex w-full items-center gap-3 p-3 text-left transition-colors hover:bg-surface-hover"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                    <Icon size={20} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs text-text-secondary">{course.code}</p>
+                    <p className="mt-1 line-clamp-2 text-sm font-medium leading-snug">
+                      {course.name}
+                    </p>
+                  </div>
+                  <ChevronDown
+                    size={18}
+                    className={`shrink-0 text-text-muted transition-transform group-hover:text-accent ${isExpanded ? "rotate-180" : ""}`}
+                  />
+                </button>
 
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs text-text-secondary">{course.code}</p>
-
-                  <p className="mt-1 line-clamp-2 text-sm font-medium leading-snug">
-                    {course.name}
-                  </p>
-                </div>
-
-                <ArrowRight
-                  size={16}
-                  className="shrink-0 text-text-muted transition group-hover:text-accent"
-                />
-              </button>
+                {isExpanded && (
+                  <div className="space-y-1 border-t border-border p-2">
+                    {destinations.map(({ label, path, icon: DestinationIcon }) => (
+                      <div
+                        key={path}
+                        className="flex items-center gap-2 rounded-lg transition-colors hover:bg-surface-hover"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (path === "modules" || path === "assignments" || path === "announcements") {
+                              onNavigate(course, path);
+                            } else {
+                              chrome.runtime.sendMessage({
+                                type: "NAVIGATE_CANVAS",
+                                url: `https://rmit.instructure.com/courses/${course.id}/${path}`,
+                              });
+                            }
+                          }}
+                          className="flex min-w-0 flex-1 items-center gap-3 rounded-lg p-2 text-left"
+                        >
+                          <DestinationIcon size={17} className="shrink-0 text-accent" />
+                          <span className="flex-1 text-sm font-medium">{label}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            chrome.runtime.sendMessage({
+                              type: "NAVIGATE_CANVAS",
+                              url: `https://rmit.instructure.com/courses/${course.id}/${path}`,
+                            })
+                          }
+                          title={`Open ${label} in Canvas`}
+                          aria-label={`Open ${label} in Canvas`}
+                          className="mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-muted transition hover:bg-accent/10 hover:text-accent"
+                        >
+                          <ExternalLink size={15} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
             );
           })}
         </div>

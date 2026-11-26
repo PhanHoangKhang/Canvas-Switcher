@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState } from "react";
 
 import HomePage from "./pages/HomePage";
-import CoursePage from "./pages/CoursePage";
 import ModulePage from "./pages/ModulePage";
 import AnnouncementPage from "./pages/AnnouncementPage";
 import AssignmentPage from "./pages/AssignmentPage";
@@ -15,7 +14,6 @@ import { getCourses } from "./services/courseService";
 
 export type Screen =
   | "home"
-  | "course"
   | "modules"
   | "announcements"
   | "assignments";
@@ -33,6 +31,7 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
   const [selectedCourse, setSelectedCourse] =
     useState<Course | null>(null);
+  const [expandedCourseIds, setExpandedCourseIds] = useState<number[]>([]);
 
   const [isChecking, setIsChecking] = useState(false);
   const [sessionError, setSessionError] = useState<string | null>(null);
@@ -62,9 +61,20 @@ export default function App() {
     void checkCanvasSession();
   }, [checkCanvasSession]);
 
-  const openCourse = (course: Course) => {
+  const toggleCourse = (courseId: number) => {
+    setExpandedCourseIds((current) =>
+      current.includes(courseId)
+        ? current.filter((id) => id !== courseId)
+        : [...current, courseId],
+    );
+  };
+
+  const openCourseSection = (
+    course: Course,
+    destination: "modules" | "assignments" | "announcements",
+  ) => {
     setSelectedCourse(course);
-    setScreen("course");
+    setScreen(destination);
   };
 
   // Initial session check
@@ -90,37 +100,31 @@ export default function App() {
       {appState === "authenticated" && (
         <>
           {screen === "home" && (
-            <HomePage onSelectCourse={openCourse} />
-          )}
-
-          {screen === "course" && selectedCourse && (
-            <CoursePage
-              course={selectedCourse}
-              onBack={() => setScreen("home")}
-              onOpenModules={() => setScreen("modules")}
-              onOpenAssignments={() => setScreen("assignments")}
-              onOpenAnnouncements={() => setScreen("announcements")}
+            <HomePage
+              expandedCourseIds={expandedCourseIds}
+              onToggleCourse={toggleCourse}
+              onNavigate={openCourseSection}
             />
           )}
 
           {screen === "modules" && selectedCourse && (
             <ModulePage
               course={selectedCourse}
-              onBack={() => setScreen("course")}
+              onBack={() => setScreen("home")}
             />
           )}
 
           {screen === "announcements" && selectedCourse && (
             <AnnouncementPage
               course={selectedCourse}
-              onBack={() => setScreen("course")}
+              onBack={() => setScreen("home")}
             />
           )}
 
           {screen === "assignments" && selectedCourse && (
             <AssignmentPage
               course={selectedCourse}
-              onBack={() => setScreen("course")}
+              onBack={() => setScreen("home")}
             />
           )}
         </>
