@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import HomePage from "./pages/HomePage";
 import CoursePage from "./pages/CoursePage";
 import ModulePage from "./pages/ModulePage";
+import AnnouncementPage from "./pages/AnnouncementPage";
+import AssignmentPage from "./pages/AssignmentPage";
 
 import LoginPage from "./components/LoginPage";
 import LoadingPage from "./components/LoadingPage";
@@ -11,7 +13,12 @@ import RefreshButton from "./components/RefreshButton";
 
 import { getCourses } from "./services/courseService";
 
-export type Screen = "home" | "course" | "modules";
+export type Screen =
+  | "home"
+  | "course"
+  | "modules"
+  | "announcements"
+  | "assignments";
 export type AppState = "loading" | "login" | "authenticated";
 
 export interface Course {
@@ -91,11 +98,27 @@ export default function App() {
               course={selectedCourse}
               onBack={() => setScreen("home")}
               onOpenModules={() => setScreen("modules")}
+              onOpenAssignments={() => setScreen("assignments")}
+              onOpenAnnouncements={() => setScreen("announcements")}
             />
           )}
 
           {screen === "modules" && selectedCourse && (
             <ModulePage
+              course={selectedCourse}
+              onBack={() => setScreen("course")}
+            />
+          )}
+
+          {screen === "announcements" && selectedCourse && (
+            <AnnouncementPage
+              course={selectedCourse}
+              onBack={() => setScreen("course")}
+            />
+          )}
+
+          {screen === "assignments" && selectedCourse && (
+            <AssignmentPage
               course={selectedCourse}
               onBack={() => setScreen("course")}
             />

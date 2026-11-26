@@ -13,6 +13,8 @@ interface Props {
   course: Course;
   onBack: () => void;
   onOpenModules: () => void;
+  onOpenAssignments: () => void;
+  onOpenAnnouncements: () => void;
 }
 
 const destinations = [
@@ -42,6 +44,8 @@ export default function CoursePage({
   course,
   onBack,
   onOpenModules,
+  onOpenAssignments,
+  onOpenAnnouncements,
 }: Props) {
   const navigateCanvas = (path: string) => {
     chrome.runtime.sendMessage({
@@ -53,6 +57,10 @@ export default function CoursePage({
   const handleInternalNavigation = (path: string) => {
     if (path === "modules") {
       onOpenModules();
+    } else if (path === "assignments") {
+      onOpenAssignments();
+    } else if (path === "announcements") {
+      onOpenAnnouncements();
     }
   };
 
