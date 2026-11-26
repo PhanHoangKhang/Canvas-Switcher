@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, CalendarDays, ClipboardList, RefreshCw } from "lucide-react";
+import {
+  ArrowLeft,
+  ClipboardList,
+  ExternalLink,
+  RefreshCw,
+} from "lucide-react";
 import type { Course } from "../App";
 import {
   getCourseAssignments,
@@ -9,15 +14,6 @@ import {
 interface Props {
   course: Course;
   onBack: () => void;
-}
-
-function formatDate(date?: string | null) {
-  if (!date) return "No due date";
-
-  return new Date(date).toLocaleString(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
 }
 
 export default function AssignmentPage({ course, onBack }: Props) {
@@ -40,6 +36,15 @@ export default function AssignmentPage({ course, onBack }: Props) {
   useEffect(() => {
     void fetchAssignments();
   }, [fetchAssignments]);
+
+  const openAssignment = (assignment: CourseAssignment) => {
+    chrome.runtime.sendMessage({
+      type: "NAVIGATE_CANVAS",
+      url:
+        assignment.html_url ??
+        `https://rmit.instructure.com/courses/${course.id}/assignments/${assignment.id}`,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background p-4">
@@ -98,27 +103,17 @@ export default function AssignmentPage({ course, onBack }: Props) {
       {!loading && !error && assignments.length > 0 && (
         <div className="space-y-3">
           {assignments.map((assignment) => (
-            <article
+            <button
               key={assignment.id}
-              className="rounded-xl border border-border bg-surface p-4"
+              onClick={() => openAssignment(assignment)}
+              className="flex w-full items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition hover:bg-surface-hover"
             >
-              <h2 className="text-sm font-semibold leading-snug">{assignment.name}</h2>
-              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted">
-                <span className="inline-flex items-center gap-1.5">
-                  <CalendarDays size={13} />
-                  {formatDate(assignment.due_at)}
-                </span>
-                {assignment.points_possible != null && (
-                  <span>{assignment.points_possible} points</span>
-                )}
-              </div>
-              {assignment.description && (
-                <div
-                  className="announcement-content mt-4 text-sm leading-relaxed text-text-secondary"
-                  dangerouslySetInnerHTML={{ __html: assignment.description }}
-                />
-              )}
-            </article>
+              <ClipboardList size={18} className="shrink-0 text-accent" />
+              <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
+                {assignment.name}
+              </span>
+              <ExternalLink size={15} className="shrink-0 text-text-muted" />
+            </button>
           ))}
         </div>
       )}

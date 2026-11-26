@@ -4,7 +4,7 @@ import {
   ArrowLeft,
   Megaphone,
   RefreshCw,
-  CalendarDays,
+  ExternalLink,
 } from "lucide-react";
 
 import type { Course } from "../App";
@@ -21,15 +21,6 @@ interface Announcement {
   message: string;
   posted_at: string;
   html_url?: string;
-}
-
-function formatDate(date?: string) {
-  if (!date) return "Unknown date";
-
-  return new Date(date).toLocaleString(undefined, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
 }
 
 export default function AnnouncementPage({
@@ -61,6 +52,15 @@ export default function AnnouncementPage({
   useEffect(() => {
     void fetchAnnouncements();
   }, [fetchAnnouncements]);
+
+  const openAnnouncement = (announcement: Announcement) => {
+    chrome.runtime.sendMessage({
+      type: "NAVIGATE_CANVAS",
+      url:
+        announcement.html_url ??
+        `https://rmit.instructure.com/courses/${course.id}/discussion_topics/${announcement.id}`,
+    });
+  };
 
   return (
     <div className="min-h-screen p-4">
@@ -151,26 +151,17 @@ export default function AnnouncementPage({
       {!loading && !error && announcements.length > 0 && (
         <div className="space-y-3">
           {announcements.map((announcement) => (
-            <article
+            <button
               key={announcement.id}
-              className="rounded-xl border border-border bg-surface p-4"
+              onClick={() => openAnnouncement(announcement)}
+              className="flex w-full items-center gap-3 rounded-xl border border-border bg-surface p-3 text-left transition hover:bg-surface-hover"
             >
-              <h2 className="text-sm font-semibold leading-snug">
+              <Megaphone size={18} className="shrink-0 text-accent" />
+              <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
                 {announcement.title}
-              </h2>
-
-              <div className="mt-2 flex items-center gap-1.5 text-xs text-text-muted">
-                <CalendarDays size={13} />
-                {formatDate(announcement.posted_at)}
-              </div>
-
-              <div
-                className="announcement-content mt-4 text-sm leading-relaxed text-text-secondary"
-                dangerouslySetInnerHTML={{
-                  __html: announcement.message,
-                }}
-              />
-            </article>
+              </span>
+              <ExternalLink size={15} className="shrink-0 text-text-muted" />
+            </button>
           ))}
         </div>
       )}
