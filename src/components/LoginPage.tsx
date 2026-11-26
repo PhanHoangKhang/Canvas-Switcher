@@ -1,11 +1,7 @@
 
 import { ExternalLink } from "lucide-react";
 
-interface LoginPageProps {
-  error?: string | null;
-}
-
-export default function LoginPage({ error }: LoginPageProps) {
+export default function LoginPage() {
   const handleLogin = () => {
     chrome.tabs.create({
       url: "https://rmit.instructure.com",
@@ -15,14 +11,8 @@ export default function LoginPage({ error }: LoginPageProps) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 font-[Nunito]">
       <p className="text-center text-sm text-gray-500">
-        Please log in to RMIT Canvas to get started.
+        Sign in to Canvas to continue using Canvas Switcher.
       </p>
-
-      {error && (
-        <p className="mt-3 max-w-xs break-words text-center text-xs text-red-600">
-          {error}
-        </p>
-      )}
 
       <button
         onClick={handleLogin}

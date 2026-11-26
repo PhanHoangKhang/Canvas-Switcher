@@ -66,7 +66,6 @@ export default function App() {
   const [loadMessage, setLoadMessage] = useState("Checking your Canvas session...");
   const initialLoadStarted = useRef(false);
   const [isChecking, setIsChecking] = useState(false);
-  const [sessionError, setSessionError] = useState<string | null>(null);
 
   const checkCanvasSession = useCallback(async () => {
     setLoadProgress(0);
@@ -184,10 +183,7 @@ export default function App() {
       setLoadProgress(100);
       setLoadMessage("Everything is ready.");
       setAppState("authenticated");
-    } catch (error) {
-      setSessionError(
-        error instanceof Error ? error.message : "Unable to load Canvas courses.",
-      );
+    } catch {
       setAppState("login");
     } finally {
       setIsChecking(false);
@@ -196,7 +192,6 @@ export default function App() {
 
   const refreshCanvasSession = useCallback(() => {
     setIsChecking(true);
-    setSessionError(null);
     setAppState("loading");
     void checkCanvasSession();
   }, [checkCanvasSession]);
@@ -240,7 +235,7 @@ export default function App() {
         />
       </div>
 
-      {appState === "login" && <LoginPage error={sessionError} />}
+      {appState === "login" && <LoginPage />}
 
       {appState === "authenticated" && (
         <>
