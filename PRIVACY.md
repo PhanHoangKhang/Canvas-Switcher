@@ -1,60 +1,35 @@
-# Canvas Switcher: Privacy Policy
+# Canvas Switcher Privacy Policy
 
-**Last updated: 26 November 2026**
+**Last updated: 27 November 2026**
 
-Canvas Switcher is a Chrome extension that helps you navigate RMIT Canvas more quickly and conveniently through Chrome's side panel.
+Canvas Switcher is a Chrome extension that displays Canvas course information in Chrome's side panel and lets you navigate to course resources.
 
-Your privacy matters. Canvas Switcher is designed to provide quick access to Canvas course resources without collecting or sending your Canvas data to the developer.
+## Information the extension accesses
 
-## What Canvas Switcher does
+When the side panel checks for a Canvas session, Canvas Switcher uses your existing signed-in session to request course information from an open Canvas site hosted on `*.instructure.com`. When available, it also requests announcement, assignment and module information for those courses. This can include course names and codes; announcement titles, messages and dates; assignment names, descriptions, due dates and possible points; module and item names, types and links; and the Canvas URLs needed to open those resources.
 
-Canvas Switcher allows you to view your available Canvas courses and quickly navigate to different course sections without repeatedly navigating through the Canvas interface.
+Canvas Switcher uses this information to show your courses and resources in the side panel and to navigate to the Canvas pages you select. Requests go to the Canvas site open in your browser and use your existing Canvas session. The extension does not send this information to the developer or to developer-operated servers, and does not sell or share it with other parties. The information is held in the extension page's memory while the side panel is in use; the extension does not save it to persistent extension storage.
 
-When you use the extension, it accesses your Canvas session to:
+Canvas Switcher does not collect your Canvas password. It does not use analytics, advertising or tracking. It does not access Canvas information beyond what is needed for the course display and navigation features described here.
 
-- Retrieve your available courses so you can view them within Canvas Switcher.
-- Identify the course you select.
-- Open course resources such as Modules, Assignments, Announcements and Grades when you choose to navigate to them.
+## Chrome permissions
 
-Canvas Switcher uses your existing Canvas login session in Chrome. You do not need to provide your Canvas username or password to the extension.
+- **Side Panel (`sidePanel`):** Displays the extension interface alongside your current tab.
+- **Tabs (`tabs`):** Finds open Canvas tabs, sends requests to their Canvas content scripts and navigates the selected tab when you choose a destination.
+- **Host access (`https://*.instructure.com/*`):** Lets the content script run on Instructure-hosted Canvas sites and make the Canvas API requests needed for the features above.
 
-## Permissions
+Canvas Switcher uses information accessed from Canvas only to provide and maintain its course display and navigation features. Its use of this information follows the Chrome Web Store User Data Policy, including the Limited Use requirements.
 
-Canvas Switcher requests the following Chrome permissions to support its functionality:
+## Data retention and sharing
 
-- **Side Panel (`sidePanel`):** Displays Canvas Switcher in Chrome's side panel, allowing you to access navigation tools alongside Canvas.
-- **Tabs (`tabs`):** Allows the extension to locate open Canvas tabs, communicate with a Canvas tab and navigate to Canvas pages when you select a destination.
-- **Host permission (`https://rmit.instructure.com/*`):** Allows Canvas Switcher to interact with RMIT Canvas to retrieve the information required for its navigation features.
-
-These permissions are used solely to support Canvas Switcher's functionality.
-
-## Data collection and storage
-
-Canvas Switcher does not collect, sell or share your Canvas course data with the developer or any external server operated by the developer.
-
-Your course information is retrieved directly from Canvas through your browser and is used only to display your courses and support navigation within the extension.
-
-Canvas Switcher does not maintain a developer-operated database of your courses, assignments, grades or other Canvas information.
-
-The extension does not use analytics, tracking technologies or advertising.
-
-## What Canvas Switcher does not do
-
-- It does not collect, sell or share your personal information.
-- It does not send your Canvas data to the developer or developer-operated servers.
-- It does not ask for or store your Canvas password.
-- It does not track your browsing activity on unrelated websites.
-- It does not modify your courses, assignments, grades or submissions.
-- It does not bypass Canvas access controls or access information you are not authorized to view.
-
-Canvas Switcher only accesses Canvas information necessary for the features you actively use.
-
-## Not affiliated
-
-Canvas Switcher is an independent student-developed project. It is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.
+Course information is kept in memory only while the extension page is running. Canvas Switcher does not maintain a developer-operated database of your courses or course resources. The extension does not send course information to the developer or other third parties. Canvas receives the requests needed to retrieve information from your account, as described above.
 
 ## Contact
 
-If you have questions, feedback or privacy concerns, you can contact the developer through the project's GitHub repository:
+For privacy questions or feedback, contact the developer through the project's GitHub repository:
 
 https://github.com/PhanHoangKhang/Canvas-Switcher/issues
+
+## Not affiliated
+
+Canvas Switcher is an independent project and is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.

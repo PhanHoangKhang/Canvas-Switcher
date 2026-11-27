@@ -25,7 +25,7 @@ Navigating between course pages, modules, assignments and other resources on Can
 
 ## Privacy
 
-Canvas Switcher is designed to access only the Canvas information necessary to provide its features.
+Canvas Switcher reads course, announcement, assignment and module information from your signed-in Canvas site to display it in the side panel and support navigation. This information is kept in the extension page's memory while it is running and is not sent to the developer or developer-operated servers. Canvas Switcher uses the information only to provide and maintain these features, in line with the Chrome Web Store User Data Policy, including its Limited Use requirements.
 
 See the [Privacy Policy](./PRIVACY.md) for details about data handling and permissions.
 

@@ -11,7 +11,7 @@
     "tabs"
   ],
   "host_permissions": [
-    "https://rmit.instructure.com/*"
+    "https://*.instructure.com/*"
   ],
   "action": {
     "default_title": "Canvas Switcher",
@@ -27,7 +27,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://rmit.instructure.com/*"
+        "https://*.instructure.com/*"
       ],
       "js": [
         "src/content.tsx"

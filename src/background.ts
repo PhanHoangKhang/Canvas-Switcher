@@ -7,12 +7,12 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   // Fetch courses from any open Canvas tab
   if (message.type === "GET_COURSES") {
-    chrome.tabs.query({ url: "https://rmit.instructure.com/*" }, (tabs) => {
+    chrome.tabs.query({ url: "https://*.instructure.com/*" }, (tabs) => {
       chrome.tabs.query(
         {
           active: true,
           lastFocusedWindow: true,
-          url: "https://rmit.instructure.com/*",
+          url: "https://*.instructure.com/*",
         },
         (activeCanvasTabs) => {
           const activeCanvasTab = activeCanvasTabs[0];
@@ -75,12 +75,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   // Fetch generic Canvas API
   if (message.type === "FETCH_CANVAS_API") {
-    chrome.tabs.query({ url: "https://rmit.instructure.com/*" }, (tabs) => {
+    chrome.tabs.query({ url: "https://*.instructure.com/*" }, (tabs) => {
       chrome.tabs.query(
         {
           active: true,
           lastFocusedWindow: true,
-          url: "https://rmit.instructure.com/*",
+          url: "https://*.instructure.com/*",
         },
         (activeCanvasTabs) => {
           const activeCanvasTab = activeCanvasTabs[0];
