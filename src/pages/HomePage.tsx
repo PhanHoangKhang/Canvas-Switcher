@@ -48,7 +48,7 @@ export default function HomePage({
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="min-h-screen bg-background p-4 pb-20">
       <header className="mb-6">
         <div className="flex items-center gap-3">
           <img src={logo} alt="Canvas Switcher logo" className="h-10 w-10 object-contain" />
@@ -169,10 +169,6 @@ export default function HomePage({
           })}
         </div>
       )}
-
-      <footer className="mt-6 border-t border-border pt-4">
-        <p className="text-center text-xs text-text-muted">Canvas Switcher</p>
-      </footer>
     </div>
   );
 }

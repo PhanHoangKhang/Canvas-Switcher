@@ -223,7 +223,7 @@ export default function App() {
   }
 
   return (
-    <div className="relative min-h-screen bg-background text-text-primary">
+    <div className="relative min-h-screen bg-background pb-14 text-text-primary">
       {hasAcceptedTerms && !showTerms && <div className="absolute right-3 top-3 z-50">
         <RefreshButton
           onClick={refreshCanvasSession}
@@ -249,7 +249,9 @@ export default function App() {
           onToggleCourse={toggleCourse}
         />
       )}
-      <footer className="border-t border-border px-4 py-3 text-center text-xs text-text-secondary">
+      <footer className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-center gap-3 border-t border-border bg-background px-4 py-3 text-xs text-text-secondary shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
+        <span className="text-text-muted">Canvas Switcher</span>
+        <span aria-hidden="true" className="text-border">·</span>
         <button
           type="button"
           className="font-semibold text-accent underline-offset-4 hover:underline"
