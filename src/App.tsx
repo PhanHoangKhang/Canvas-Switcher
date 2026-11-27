@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./components/LoginPage";
 import LoadingPage from "./components/LoadingPage";
 import RefreshButton from "./components/RefreshButton";
+import TermsPage from "./pages/TermsPage";
 
 import { getCourses } from "./services/courseService";
 import {
@@ -52,6 +53,11 @@ function emptyCourseData(): CourseContentData {
 }
 
 export default function App() {
+  const termsVersion = "2026-11-27";
+  const acceptedTerms = localStorage.getItem("canvas-switcher-terms-version") === termsVersion;
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(acceptedTerms);
+  const [showTerms, setShowTerms] = useState(!acceptedTerms);
+  const [termsChecked, setTermsChecked] = useState(false);
   const [appState, setAppState] = useState<AppState>("loading");
   const [courses, setCourses] = useState<Course[]>([]);
   const [courseData, setCourseData] = useState<Record<number, CourseContentData>>({});
@@ -191,10 +197,18 @@ export default function App() {
   }, [checkCanvasSession]);
 
   useEffect(() => {
+    if (!hasAcceptedTerms) return;
     if (initialLoadStarted.current) return;
     initialLoadStarted.current = true;
     void checkCanvasSession();
-  }, [checkCanvasSession]);
+  }, [checkCanvasSession, hasAcceptedTerms]);
+
+  const acceptTerms = () => {
+    if (!termsChecked) return;
+    localStorage.setItem("canvas-switcher-terms-version", termsVersion);
+    setHasAcceptedTerms(true);
+    setShowTerms(false);
+  };
 
   const toggleCourse = (courseId: number) => {
     setExpandedCourseIds((current) =>
@@ -204,22 +218,30 @@ export default function App() {
     );
   };
 
-  if (appState === "loading") {
+  if (hasAcceptedTerms && appState === "loading" && !showTerms) {
     return <LoadingPage progress={loadProgress} message={loadMessage} />;
   }
 
   return (
     <div className="relative min-h-screen bg-background text-text-primary">
-      <div className="absolute right-3 top-3 z-50">
+      {hasAcceptedTerms && !showTerms && <div className="absolute right-3 top-3 z-50">
         <RefreshButton
           onClick={refreshCanvasSession}
           isLoading={isChecking}
         />
-      </div>
+      </div>}
 
-      {appState === "login" && <LoginPage />}
+      {showTerms ? (
+        <TermsPage
+          isGate={!hasAcceptedTerms}
+          checked={termsChecked}
+          onCheckedChange={setTermsChecked}
+          onAgree={acceptTerms}
+          onClose={() => setShowTerms(false)}
+        />
+      ) : appState === "login" ? <LoginPage /> : null}
 
-      {appState === "authenticated" && (
+      {!showTerms && appState === "authenticated" && (
         <HomePage
           courses={courses}
           courseData={courseData}
@@ -227,6 +249,15 @@ export default function App() {
           onToggleCourse={toggleCourse}
         />
       )}
+      <footer className="border-t border-border px-4 py-3 text-center text-xs text-text-secondary">
+        <button
+          type="button"
+          className="font-semibold text-accent underline-offset-4 hover:underline"
+          onClick={() => setShowTerms(true)}
+        >
+          Terms of Use &amp; Privacy
+        </button>
+      </footer>
     </div>
   );
 }
