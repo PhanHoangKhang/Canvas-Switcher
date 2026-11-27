@@ -13,22 +13,14 @@ Navigating between course pages, modules, assignments and other resources on Can
 - **Course Overview** — View your available Canvas courses in one place.
 - **Quick Navigation** — Quickly access course resources, including Modules, Assignments, Announcements and Grades.
 - **Side Panel Experience** — Keep course navigation accessible alongside your current browser tab.
-- **Canvas Integration** — Uses your existing Canvas session without requiring you to enter your Canvas credentials into the extension.
-
-## Tech Stack
-
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- Chrome Extension API (Manifest V3)
+- **Canvas Integration** — Works with supported Canvas sites using your existing Canvas session, without requiring you to enter your Canvas credentials into the extension.
 
 ## Privacy
 
-Canvas Switcher reads course, announcement, assignment and module information from your signed-in Canvas site to display it in the side panel and support navigation. This information is kept in the extension page's memory while it is running and is not sent to the developer or developer-operated servers. Canvas Switcher uses the information only to provide and maintain these features, in line with the Chrome Web Store User Data Policy, including its Limited Use requirements.
+Canvas Switcher accesses course details and related announcements, assignments and modules to provide its navigation features. This information is processed locally within the extension and is not sent to the developer.
 
-See the [Privacy Policy](./PRIVACY.md) for details about data handling and permissions.
+See [PRIVACY.md](./PRIVACY.md) for details about data handling and permissions.
 
 ## Disclaimer
 
-Canvas Switcher is an independent student-developed project and is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.
+Canvas Switcher is an independent student-developed project and is not affiliated with, endorsed by, or officially associated with Instructure, Canvas or any educational institution.
