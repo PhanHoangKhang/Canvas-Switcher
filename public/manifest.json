@@ -6,7 +6,6 @@
   "description": "Navigate Canvas courses and resources faster.",
   "permissions": [
     "sidePanel",
-    "storage",
     "activeTab"
   ],
   "host_permissions": [

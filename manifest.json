@@ -6,7 +6,6 @@
   "description": "Navigate Canvas faster.",
   "permissions": [
     "sidePanel",
-    "storage",
     "activeTab",
     "tabs"
   ],
