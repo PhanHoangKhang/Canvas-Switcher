@@ -37,7 +37,7 @@ Canvas Switcher follows the Chrome Web Store User Data Policy, including its Lim
 
 ## Contact
 
-For privacy questions, report an issue through [GitHub](https://github.com/PhanHoangKhang/Canvas-Switcher/issues).
+For privacy questions, report an issue through https://github.com/PhanHoangKhang/Canvas-Switcher/issues
 
 ## About Canvas Switcher
 
