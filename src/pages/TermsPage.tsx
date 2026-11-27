@@ -100,16 +100,16 @@ export default function TermsPage({
               your current browser tab.
             </li>
             <li>
+              <strong>Active tab:</strong> Provides temporary access to the
+              current tab when you invoke the extension.
+            </li>
+            <li>
               <strong>Site access:</strong> Allows the extension to interact
               with supported Canvas sites hosted on{" "}
               <code className="rounded-sm bg-background px-1">
                 *.instructure.com
               </code>
               .
-            </li>
-            <li>
-              <strong>Other permissions:</strong> Are used only where necessary
-              to support the extension's functionality.
             </li>
           </ul>
         </section>
