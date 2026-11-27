@@ -1,23 +1,21 @@
 # Canvas Switcher
 
-Canvas Switcher is a Chrome extension that helps students navigate RMIT Canvas more efficiently through a dedicated Chrome side panel.
+**Navigate Canvas faster.**
 
-Instead of repeatedly navigating through Canvas menus and pages, Canvas Switcher provides quick access to course resources, making it easier to move between learning materials while keeping your current browsing workflow uninterrupted.
+Canvas Switcher is a Chrome extension that brings Canvas course navigation into a dedicated side panel, helping students access their course resources without repeatedly navigating through the Canvas interface.
 
-## Why Canvas Switcher?
+## Overview
 
-Students often need to switch between different Canvas sections to access modules, assignments, announcements, grades and other course resources. Repeated navigation can interrupt their workflow, especially when they are working across multiple courses.
-
-Canvas Switcher aims to reduce this friction by bringing frequently accessed course destinations into a single, accessible interface.
+Navigating between course pages, modules, assignments and other resources on Canvas can interrupt a student's workflow. Canvas Switcher provides a more accessible way to navigate course content, allowing students to move between resources while keeping their browsing experience uninterrupted.
 
 ## Features
 
-- **Course Overview** — View available Canvas courses in one place.
-- **Quick Navigation** — Access course resources such as Modules, Assignments, Announcements and Grades.
-- **Chrome Side Panel** — Navigate Canvas resources without having to repeatedly navigate through the Canvas interface.
-- **Canvas Integration** — Works with your existing Canvas session without requiring you to enter your Canvas credentials into the extension.
+- **Course Overview** — View your available Canvas courses in one place.
+- **Quick Navigation** — Quickly access course resources, including Modules, Assignments, Announcements and Grades.
+- **Side Panel Experience** — Keep course navigation accessible alongside your current browser tab.
+- **Canvas Integration** — Uses your existing Canvas session without requiring you to enter your Canvas credentials into the extension.
 
-## Built With
+## Tech Stack
 
 - React
 - TypeScript
@@ -25,6 +23,12 @@ Canvas Switcher aims to reduce this friction by bringing frequently accessed cou
 - Tailwind CSS
 - Chrome Extension API (Manifest V3)
 
+## Privacy
+
+Canvas Switcher is designed to access only the Canvas information necessary to provide its features.
+
+See the [Privacy Policy](./PRIVACY.md) for details about data handling and permissions.
+
 ## Disclaimer
 
-Canvas Switcher is an independent student-developed project. It is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.
+Canvas Switcher is an independent student-developed project and is not affiliated with, endorsed by, or officially associated with RMIT University, Instructure or Canvas.
