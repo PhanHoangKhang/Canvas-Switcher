@@ -54,7 +54,7 @@ export default function HomePage({
           <img src={logo} alt="Canvas Switcher logo" className="h-10 w-10 object-contain" />
           <div>
             <h1 className="text-lg font-bold">Canvas Switcher</h1>
-            <p className="text-xs text-text-secondary">Your courses, one click away.</p>
+            <p className="text-xs text-text-secondary">Navigate Canvas faster, one click away.</p>
           </div>
         </div>
       </header>
