@@ -1,6 +1,6 @@
 # Canvas Switcher
 
-![Canvas Switcher](./Canvas Switcher_ Faster Canvas Navigation.png)
+![Canvas Switcher](<./Canvas_Switcher_ Faster_Canvas_Navigation.png>)
 
 **Navigate Canvas faster.**
 
