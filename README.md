@@ -1,5 +1,7 @@
 # Canvas Switcher
 
+![Canvas Switcher](./banner.png)
+
 **Navigate Canvas faster.**
 
 Canvas Switcher is a Chrome extension that brings Canvas course navigation into a dedicated side panel, helping students access their course resources without repeatedly navigating through the Canvas interface.
@@ -10,10 +12,10 @@ Navigating between course pages, modules, assignments and other resources on Can
 
 ## Features
 
-- **Course Overview** — View your available Canvas courses in one place.
-- **Quick Navigation** — Quickly access course resources, including Modules, Assignments, Announcements and Grades.
-- **Side Panel Experience** — Keep course navigation accessible alongside your current browser tab.
-- **Canvas Integration** — Works with supported Canvas sites using your existing Canvas session, without requiring you to enter your Canvas credentials into the extension.
+- **Course Overview**: View your available Canvas courses in one place.
+- **Quick Navigation**: Quickly access course resources, including Modules, Assignments, Announcements and Grades.
+- **Side Panel Experience**: Keep course navigation accessible alongside your current browser tab.
+- **Canvas Integration**: Works with supported Canvas sites using your existing Canvas session, without requiring you to enter your Canvas credentials into the extension.
 
 ## Privacy
 
