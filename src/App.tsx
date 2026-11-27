@@ -250,7 +250,7 @@ export default function App() {
         />
       )}
       <footer className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-center gap-3 border-t border-border bg-background px-4 py-3 text-xs text-text-secondary shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
-        <span className="text-text-muted">Canvas Switcher</span>
+        <span className="text-text-secondary">Canvas Switcher</span>
         <span aria-hidden="true" className="text-border">·</span>
         <button
           type="button"
