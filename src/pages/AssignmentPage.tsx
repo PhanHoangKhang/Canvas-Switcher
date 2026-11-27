@@ -1,5 +1,4 @@
 import {
-  ArrowLeft,
   ClipboardList,
   ExternalLink,
 } from "lucide-react";
@@ -8,14 +7,12 @@ import type { CourseAssignment } from "../services/canvasService";
 
 interface Props {
   course: Course;
-  onBack: () => void;
   assignments: CourseAssignment[];
   error?: string;
 }
 
 export default function AssignmentPage({
   course,
-  onBack,
   assignments,
   error,
 }: Props) {
@@ -29,22 +26,7 @@ export default function AssignmentPage({
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="mb-5">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
-        >
-          <ArrowLeft size={16} />
-          Courses
-        </button>
-      </div>
-
-      <div className="mb-6">
-        <h1 className="text-lg font-bold">Assignments</h1>
-        <p className="mt-1 text-xs text-text-secondary">{course.name}</p>
-      </div>
-
+    <div className="space-y-2 px-2 pb-3 pt-1">
       {error && (
         <div className="rounded-xl border border-border bg-surface p-4">
           <p className="text-sm font-medium">Unable to load assignments</p>
@@ -76,9 +58,6 @@ export default function AssignmentPage({
         </div>
       )}
 
-      <footer className="mt-6 border-t border-border pt-4">
-        <p className="text-center text-xs text-text-muted">Canvas Switcher</p>
-      </footer>
     </div>
   );
 }

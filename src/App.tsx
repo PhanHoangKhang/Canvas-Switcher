@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import HomePage from "./pages/HomePage";
-import ModulePage from "./pages/ModulePage";
-import AnnouncementPage from "./pages/AnnouncementPage";
-import AssignmentPage from "./pages/AssignmentPage";
 
 import LoginPage from "./components/LoginPage";
 import LoadingPage from "./components/LoadingPage";
@@ -20,7 +17,6 @@ import {
   type CourseModule,
 } from "./services/canvasService";
 
-export type Screen = "home" | "modules" | "announcements" | "assignments";
 export type AppState = "loading" | "login" | "authenticated";
 
 export interface Course {
@@ -57,10 +53,8 @@ function emptyCourseData(): CourseContentData {
 
 export default function App() {
   const [appState, setAppState] = useState<AppState>("loading");
-  const [screen, setScreen] = useState<Screen>("home");
   const [courses, setCourses] = useState<Course[]>([]);
   const [courseData, setCourseData] = useState<Record<number, CourseContentData>>({});
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [expandedCourseIds, setExpandedCourseIds] = useState<number[]>([]);
   const [loadProgress, setLoadProgress] = useState(0);
   const [loadMessage, setLoadMessage] = useState("Checking your Canvas session...");
@@ -210,21 +204,9 @@ export default function App() {
     );
   };
 
-  const openCourseSection = (
-    course: Course,
-    destination: "modules" | "assignments" | "announcements",
-  ) => {
-    setSelectedCourse(course);
-    setScreen(destination);
-  };
-
   if (appState === "loading") {
     return <LoadingPage progress={loadProgress} message={loadMessage} />;
   }
-
-  const selectedCourseData = selectedCourse
-    ? courseData[selectedCourse.id] ?? emptyCourseData()
-    : emptyCourseData();
 
   return (
     <div className="relative min-h-screen bg-background text-text-primary">
@@ -238,43 +220,12 @@ export default function App() {
       {appState === "login" && <LoginPage />}
 
       {appState === "authenticated" && (
-        <>
-          {screen === "home" && (
-            <HomePage
-              courses={courses}
-              expandedCourseIds={expandedCourseIds}
-              onToggleCourse={toggleCourse}
-              onNavigate={openCourseSection}
-            />
-          )}
-
-          {screen === "modules" && selectedCourse && (
-            <ModulePage
-              course={selectedCourse}
-              modules={selectedCourseData.modules}
-              error={selectedCourseData.errors.modules}
-              onBack={() => setScreen("home")}
-            />
-          )}
-
-          {screen === "announcements" && selectedCourse && (
-            <AnnouncementPage
-              course={selectedCourse}
-              announcements={selectedCourseData.announcements}
-              error={selectedCourseData.errors.announcements}
-              onBack={() => setScreen("home")}
-            />
-          )}
-
-          {screen === "assignments" && selectedCourse && (
-            <AssignmentPage
-              course={selectedCourse}
-              assignments={selectedCourseData.assignments}
-              error={selectedCourseData.errors.assignments}
-              onBack={() => setScreen("home")}
-            />
-          )}
-        </>
+        <HomePage
+          courses={courses}
+          courseData={courseData}
+          expandedCourseIds={expandedCourseIds}
+          onToggleCourse={toggleCourse}
+        />
       )}
     </div>
   );

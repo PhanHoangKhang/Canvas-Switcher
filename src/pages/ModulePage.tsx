@@ -1,5 +1,4 @@
 import {
-  ArrowLeft,
   ClipboardList,
   ExternalLink,
   FileText,
@@ -13,7 +12,6 @@ import {
 
 interface Props {
   course: Course;
-  onBack: () => void;
   modules: CourseModule[];
   error?: string;
 }
@@ -61,29 +59,11 @@ function navigateToCanvas(url: string) {
 
 export default function ModulePage({
   course,
-  onBack,
   modules,
   error,
 }: Props) {
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="mb-5">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm text-text-secondary transition hover:text-accent"
-        >
-          <ArrowLeft size={16} />
-          Courses
-        </button>
-      </div>
-
-      <div className="mb-6">
-        <h1 className="text-lg font-bold">Modules</h1>
-        <p className="mt-2 text-xs leading-relaxed text-text-secondary">
-          {course.name}
-        </p>
-      </div>
-
+    <div className="space-y-2 px-2 pb-3 pt-1">
       {error && (
         <div className="rounded-xl border border-border bg-surface p-4">
           <p className="text-sm font-medium">Unable to load modules</p>
