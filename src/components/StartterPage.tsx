@@ -1,11 +1,11 @@
 
 import { RotateCw } from "lucide-react";
 
-interface LoginPageProps {
+interface StartterPageProps {
   onReload: () => void;
 }
 
-export default function LoginPage({ onReload }: LoginPageProps) {
+export default function StartterPage({ onReload }: StartterPageProps) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-6 font-[Nunito]">
       <p className="text-center text-sm text-text-primary">

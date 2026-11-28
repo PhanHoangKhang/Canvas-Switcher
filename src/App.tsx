@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import HomePage from "./pages/HomePage";
 
-import LoginPage from "./components/LoginPage";
+import StartterPage from "./components/StartterPage";
 import LoadingPage from "./components/LoadingPage";
 import RefreshButton from "./components/RefreshButton";
 import TermsPage from "./pages/TermsPage";
@@ -239,7 +239,7 @@ export default function App() {
           onAgree={acceptTerms}
           onClose={() => setShowTerms(false)}
         />
-      ) : appState === "login" ? <LoginPage onReload={refreshCanvasSession} /> : null}
+      ) : appState === "login" ? <StartterPage onReload={refreshCanvasSession} /> : null}
 
       {!showTerms && appState === "authenticated" && (
         <HomePage
