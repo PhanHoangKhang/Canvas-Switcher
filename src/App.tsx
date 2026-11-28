@@ -239,7 +239,7 @@ export default function App() {
           onAgree={acceptTerms}
           onClose={() => setShowTerms(false)}
         />
-      ) : appState === "login" ? <LoginPage /> : null}
+      ) : appState === "login" ? <LoginPage onReload={refreshCanvasSession} /> : null}
 
       {!showTerms && appState === "authenticated" && (
         <HomePage
